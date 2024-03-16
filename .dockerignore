@@ -1,0 +1,17 @@
+.env
+.vscode
+.devcontainer
+__pycache__
+.dockerignore
+.gitignore
+migrations/
+instance/
+*.db
+Dockerfile
+docker*.txt
+*.log
+*.md
+*.yml
+*.yaml
+*.json
+*.csv
