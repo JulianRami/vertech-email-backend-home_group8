@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..schemas import EmailFormSchema,EmailSchema,PlainUserSchema
+from ..schemas import EmailFormSchema,EmailSchema
 from ..models.email import EmailModel
 from sqlalchemy.exc import SQLAlchemyError
 from ..models.user import UserModel
@@ -60,13 +60,4 @@ class EmailDetail(MethodView):
             return email
         except SQLAlchemyError as e:
             abort(500, message="Failed to fetch email details.")
-
-
-@blp.route("/api/users")
-class Users(MethodView):
-    @jwt_required()
-    @blp.response(200, PlainUserSchema(many=True))
-    def get(self):
-        users = UserModel.query.all()
-        return users
 

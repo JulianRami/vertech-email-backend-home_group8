@@ -1,10 +1,10 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt, create_refresh_token, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required
 from datetime import timedelta
 from ..models.user import UserModel
-from ..schemas import UserSchema, UserLoginSchema
+from ..schemas import UserSchema, UserLoginSchema, PlainUserSchema
 
 from sqlalchemy.exc import IntegrityError
 
@@ -42,3 +42,12 @@ class UserLogin(MethodView):
             return {"access_token": access_token, **user.json()}, 200
 
         abort(401, message="Invalid credentials.")
+
+
+@blp.route("/api/users")
+class Users(MethodView):
+    @jwt_required()
+    @blp.response(200, PlainUserSchema(many=True))
+    def get(self):
+        users = UserModel.query.all()
+        return users
