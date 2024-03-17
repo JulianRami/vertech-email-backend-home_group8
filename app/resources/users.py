@@ -4,7 +4,8 @@ from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token, jwt_required
 from datetime import timedelta
 from ..models.user import UserModel
-from ..schemas import UserSchema, UserLoginSchema, PlainUserSchema
+from ..schemas.UserSchema import UserSchema, UserLoginSchema
+from ..schemas.PlainSchema import PlainUserSchema
 
 from sqlalchemy.exc import IntegrityError
 
