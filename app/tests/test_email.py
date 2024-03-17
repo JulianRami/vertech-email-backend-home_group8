@@ -5,6 +5,12 @@ from flask_jwt_extended import create_access_token
 
 @pytest.fixture
 def app():
+    """
+    Fixture for creating and configuring the Flask app for testing.
+
+    Yields:
+        Flask app: The configured Flask app instance.
+    """
     app = create_app()
 
     with app.app_context():
@@ -19,9 +25,24 @@ def app():
 
 @pytest.fixture
 def client(app):
+    """
+    Fixture for creating a test client to interact with the Flask app.
+
+    Args:
+        app: The configured Flask app instance.
+
+    Returns:
+        Test client: The test client for making requests to the app.
+    """
     return app.test_client()
 
 def test_send_email(client):
+    """
+    Test case for sending an email.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     response_sender = client.post(
         '/api/register',
         json={'name': 'Sender User', 'u_email': 'sender@example.com', 'password': 'test123'}
@@ -51,7 +72,12 @@ def test_send_email(client):
      
 
 def test_get_emails(client):
+    """
+    Test case for retrieving emails.
 
+    Args:
+        client: The test client for making requests to the app.
+    """
     response = client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
@@ -74,6 +100,12 @@ def test_get_emails(client):
     
 
 def test_get_email_detail(client):
+    """
+    Test case for retrieving details of a specific email.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     response = client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
@@ -94,6 +126,12 @@ def test_get_email_detail(client):
     assert response.status_code == 404
 
 def test_get_users(client):
+    """
+    Test case for retrieving users.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     response = client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
