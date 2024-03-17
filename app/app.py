@@ -19,7 +19,7 @@ def create_app():
     app = Flask(__name__)
     frontend_url = os.getenv("FRONTEND_URL")
     print(frontend_url)
-    CORS(app, origins=["http://email.techfellowhomegroup8.net", "http://ec2-23-22-195-194.compute-1.amazonaws.com", "http://23.22.195.194"])
+    CORS(app, origins=["http://email.techfellowhomegroup8.net", "http://ec2-23-22-195-194.compute-1.amazonaws.com", "http://23.22.195.194", "*"])
     load_dotenv()
     app.config.from_object(config.get_config())
 
