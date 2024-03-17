@@ -49,3 +49,4 @@ You can go to http://localhost:5000/api/swagger-ui for a full documentation in t
 1. Cleaning some functions calling that weren't used in some files
 2. Create a docker compose file to run needed services in local
 3. The code is documented
+4. The Schemas are ordered by categories

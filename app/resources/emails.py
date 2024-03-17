@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..schemas import EmailFormSchema,EmailSchema
+from ..schemas.EmailSchema import EmailFormSchema,EmailSchema
 from ..models.email import EmailModel
 from sqlalchemy.exc import SQLAlchemyError
 from ..models.user import UserModel
