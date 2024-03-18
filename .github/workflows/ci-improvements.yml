@@ -11,6 +11,11 @@ jobs:
     defaults:
       run:
         shell: bash
+        
+    env:
+      FLASK_ENV: testing
+      FLASK_APP: app.app
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
     steps:
       - name: Checkout repository
@@ -22,12 +27,7 @@ jobs:
           python-version: 3.12
 
       - name: Install dependencies
-        env:
-          FLASK_ENV: testing
-          FLASK_APP: app.app
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         run: |
-          printenv | grep JWT_SECRET_KEY
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
