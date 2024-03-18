@@ -3,7 +3,7 @@ name: ci-improvements
 on:
   push:
     branches:
-      - dev-diego
+      - main
 
 jobs:
   test:

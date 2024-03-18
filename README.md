@@ -60,6 +60,6 @@ As code improvements for back-end from group 9 to group 8, we suggest:
 4. The Schemas are ordered by categories
 5. The Dockerfile includes documentation that outlines the proposed steps for the build process.
 6. Environment variables from the .env file are not set inside the build recipe. This helps to ensure the adequate management of environment variables.
-7. Implements testing pipeline with informative summary, in order to find and address bugs quicker.
+7. Implements testing pipeline with informative summary, in order to find and address bugs quicker. You can check informative test results in Summary tab of ci workflow in Github.
 
 Preview suggestions are related to the pull request
