@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      # - main
+      - main
 
 env:
   REGISTRY: ghcr.io
@@ -11,6 +11,8 @@ env:
 
 jobs:
   build-and-push-image:
+    # only run this job if the push is to the original repository
+    if: github.repository == 'TechFellowGroup8/vertech-email-backend'
     runs-on: ubuntu-latest
 
     permissions:
