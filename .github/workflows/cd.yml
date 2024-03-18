@@ -8,6 +8,8 @@ on:
 
 jobs:
   deploy:
+    # only run this job if its is the original repository
+    if: github.repository == 'TechFellowGroup8/vertech-email-backend'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code

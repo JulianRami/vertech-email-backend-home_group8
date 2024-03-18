@@ -5,6 +5,12 @@ from ..database.db import db
 
 @pytest.fixture
 def app():
+    """
+    Fixture for creating and configuring the Flask app for testing.
+
+    Yields:
+        Flask app: The configured Flask app instance.
+    """
     app = create_app()
 
     with app.app_context():
@@ -19,11 +25,25 @@ def app():
 
 @pytest.fixture
 def client(app):
+    """
+    Fixture for creating a test client to interact with the Flask app.
+
+    Args:
+        app: The configured Flask app instance.
+
+    Returns:
+        Test client: The test client for making requests to the app.
+    """
     return app.test_client()
 
 
 def test_user_registration_with_valid_credentials(client):
-    # Create a new user
+    """
+    Test case for registering a new user with valid credentials.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     response = client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
@@ -33,7 +53,12 @@ def test_user_registration_with_valid_credentials(client):
 
 
 def test_duplicate_user_registration(client):
-    # Register the same user twice
+    """
+    Test case for attempting to register the same user twice.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
@@ -48,7 +73,12 @@ def test_duplicate_user_registration(client):
 
 
 def test_user_login_with_valid_credentials(client):
-    # Register a user
+    """
+    Test case for user login with valid credentials.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     client.post(
         '/api/register',
         json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
@@ -63,7 +93,12 @@ def test_user_login_with_valid_credentials(client):
 
 
 def test_login_with_invalid_credentials(client):
-    # Attempt login with incorrect credentials
+    """
+    Test case for login attempt with invalid credentials.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
     response = client.post(
         '/api/login',
         json={'u_email': 'test@example.com', 'password': 'wrongpassword'}
