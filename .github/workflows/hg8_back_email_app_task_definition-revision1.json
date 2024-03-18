@@ -1,0 +1,89 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:637423626700:task-definition/hg8_back_email_app_task_definition:1",
+    "containerDefinitions": [
+        {
+            "name": "hg8_back_email_app_container",
+            "image": "637423626700.dkr.ecr.us-east-1.amazonaws.com/home9/hg8_back_email_app_repository",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "hg8_back_email_app_container-5000-tcp",
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "FLASK_APP",
+                    "value": "app.app"
+                },
+                {
+                    "name": "DATABASE_URL",
+                    "value": "postgresql://hg9:qJ1WFaMV14FqU5d7M4uCJTWCUCq89Gti@dpg-cnrp4pmd3nmc7399fu6g-a.oregon-postgres.render.com:5432/hg8_mail_app_db"
+                },
+                {
+                    "name": "FLASK_ENV",
+                    "value": "production"
+                },
+                {
+                    "name": "JWT_SECRET_KEY",
+                    "value": "3kP7A5tD8J"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "systemControls": []
+        }
+    ],
+    "family": "hg8_back_email_app_task_definition",
+    "taskRoleArn": "arn:aws:iam::637423626700:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::637423626700:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-03-18T03:05:12.140Z",
+    "registeredBy": "arn:aws:iam::637423626700:user/mateo_vasco",
+    "tags": [
+        {
+            "key": "home_group_9",
+            "value": "task_definition_redeploy_hg8"
+        }
+    ]
+}
