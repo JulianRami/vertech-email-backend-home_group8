@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: us-east-1 #OK
   ECR_REPOSITORY: home9/hg8_back_email_app_repository #OK
-  ECS_SERVICE: hg8_back_email_app_service #OK
+  ECS_SERVICE: hg8_back_email_app_service #OK 
   ECS_CLUSTER: email_app_home_9 #OK
   ECS_TASK_DEFINITION: .github/workflows/hg8_back_email_app_task_definition-revision1.json #OK
   CONTAINER_NAME: hg8_back_email_app_container #OK
