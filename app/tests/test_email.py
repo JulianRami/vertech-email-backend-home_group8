@@ -1,7 +1,7 @@
 import pytest
 from ..app import create_app
 from ..database.db import db
-from flask_jwt_extended import create_access_token
+
 
 @pytest.fixture
 def app():
@@ -36,17 +36,33 @@ def client(app):
     """
     return app.test_client()
 
-def test_send_email(client):
+
+@pytest.fixture
+def create_user(client):
+    """
+    Fixture for creating a user for testing.
+
+    Args:
+        client: The test client for making requests to the app.
+
+    Returns:
+        dict: A dictionary containing the user's details.
+    """
+    response = client.post(
+        '/api/register',
+        json={'name': 'Sender User', 'u_email': 'sender@example.com', 'password': 'test123'}
+    )
+    return response
+
+
+def test_send_email(client, create_user):
     """
     Test case for sending an email.
 
     Args:
         client: The test client for making requests to the app.
     """
-    response_sender = client.post(
-        '/api/register',
-        json={'name': 'Sender User', 'u_email': 'sender@example.com', 'password': 'test123'}
-    )
+    response_sender = create_user
     assert response_sender.status_code == 201
 
     response_recipient = client.post(
@@ -71,22 +87,19 @@ def test_send_email(client):
     assert response_send_email.status_code == 201
      
 
-def test_get_emails(client):
+def test_get_emails(client, create_user):
     """
     Test case for retrieving emails.
 
     Args:
         client: The test client for making requests to the app.
     """
-    response = client.post(
-        '/api/register',
-        json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
-    )
+    response = create_user
     assert response.status_code == 201
 
     response = client.post(
         '/api/login',
-        json={'u_email': 'test@example.com', 'password': 'test123'}
+        json={'u_email': 'sender@example.com', 'password': 'test123'}
     )
     assert response.status_code == 200
     access_token = response.json['access_token']
@@ -99,22 +112,19 @@ def test_get_emails(client):
     assert isinstance(response.json, list)
     
 
-def test_get_email_detail(client):
+def test_get_email_detail(client, create_user):
     """
     Test case for retrieving details of a specific email.
 
     Args:
         client: The test client for making requests to the app.
     """
-    response = client.post(
-        '/api/register',
-        json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
-    )
+    response = create_user
     assert response.status_code == 201
 
     response = client.post(
         '/api/login',
-        json={'u_email': 'test@example.com', 'password': 'test123'}
+        json={'u_email': 'sender@example.com', 'password': 'test123'}
     )
     assert response.status_code == 200
     access_token = response.json['access_token']
@@ -125,22 +135,20 @@ def test_get_email_detail(client):
     )
     assert response.status_code == 404
 
-def test_get_users(client):
+
+def test_get_users(client, create_user):
     """
     Test case for retrieving users.
 
     Args:
         client: The test client for making requests to the app.
     """
-    response = client.post(
-        '/api/register',
-        json={'name': 'Test User', 'u_email': 'test@example.com', 'password': 'test123'}
-    )
+    response = create_user
     assert response.status_code == 201
 
     response = client.post(
         '/api/login',
-        json={'u_email': 'test@example.com', 'password': 'test123'}
+        json={'u_email': 'sender@example.com', 'password': 'test123'}
     )
     assert response.status_code == 200
     access_token = response.json['access_token']
@@ -148,3 +156,67 @@ def test_get_users(client):
     assert response.status_code == 200
     assert isinstance(response.json, list)
     assert len(response.json) > 0
+
+
+def test_delete_received_email(client, create_user):
+    """
+    Test case for deleting an email.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
+    response = create_user
+    assert response.status_code == 201
+
+    response = client.post(
+        '/api/login',
+        json={'u_email': 'sender@example.com', 'password': 'test123'}
+    )
+    assert response.status_code == 200
+    access_token = response.json['access_token']
+
+    response_send_email = client.post(
+        '/api/emails',
+        headers={'Authorization': f'Bearer {access_token}'},
+        json={'recipient_email': 'sender@example.com', 'subject': 'Test Subject', 'body': 'Test Body',
+              'timestamp': '2024-03-29T01:32:18.487Z'}
+    )
+    assert response_send_email.status_code == 201
+
+    response = client.patch(
+        '/api/emails/1',
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    assert response.status_code == 204
+
+
+def test_delete_sent_email(client, create_user):
+    """
+    Test case for deleting an email.
+
+    Args:
+        client: The test client for making requests to the app.
+    """
+    response = create_user
+    assert response.status_code == 201
+
+    response = client.post(
+        '/api/login',
+        json={'u_email': 'sender@example.com', 'password': 'test123'}
+    )
+    assert response.status_code == 200
+    access_token = response.json['access_token']
+
+    response_send_email = client.post(
+        '/api/emails',
+        headers={'Authorization': f'Bearer {access_token}'},
+        json={'recipient_email': 'sender@example.com', 'subject': 'Test Subject', 'body': 'Test Body',
+              'timestamp': '2024-03-29T01:32:18.487Z'}
+    )
+    assert response_send_email.status_code == 201
+
+    response = client.patch(
+        '/api/emails/sent/1',
+        headers={'Authorization': f'Bearer {access_token}'}
+    )
+    assert response.status_code == 204

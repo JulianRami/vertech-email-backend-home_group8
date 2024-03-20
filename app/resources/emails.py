@@ -55,20 +55,20 @@ class Emails(MethodView):
     Method view for handling email retrieval.
 
     Attributes:
-        get: Handles GET requests for retrieving emails.
+        get: Handles GET requests for received emails.
     """
     @jwt_required()
     @blp.response(200, EmailSchema(many=True))
     def get(self):
         """
-        Handle GET request to retrieve emails.
+        Handle GET request to received emails.
 
         Returns:
             list: A list of received emails.
         """
         current_user_id = get_jwt_identity()
         try:
-            received_emails = EmailModel.query.filter_by(recipient_id=current_user_id).all()
+            received_emails = EmailModel.query.filter_by(recipient_id=current_user_id, received_deleted=False).all()
             return received_emails
         except SQLAlchemyError as e:
             abort(500, message="Failed to fetch emails.")
@@ -80,13 +80,13 @@ class EmailDetail(MethodView):
     Method view for handling email details retrieval.
 
     Attributes:
-        get: Handles GET requests for retrieving details of a specific email.
+        get: Handles GET requests for retrieving details of a specific received email.
     """
     @jwt_required()
     @blp.response(200, EmailSchema())
     def get(self, email_id):
         """
-        Handle GET request to retrieve details of a specific email.
+        Handle GET request to retrieve details of a specific received email.
 
         Args:
             email_id (int): The ID of the email to retrieve.
@@ -96,10 +96,96 @@ class EmailDetail(MethodView):
         """
         current_user_id = get_jwt_identity()
         try:
-            email = EmailModel.query.filter_by(id=email_id, recipient_id=current_user_id).first()
+            email = EmailModel.query.filter_by(id=email_id, recipient_id=current_user_id, received_deleted=False).first()
             if email is None:
                 abort(404, message="Email not found or unauthorized.")
             return email
         except SQLAlchemyError as e:
             abort(500, message="Failed to fetch email details.")
 
+
+@blp.route("/api/emails/sent")
+class EmailsSent(MethodView):
+    """
+    Method view for handling sent email retrieval.
+
+    Attributes:
+        get: Handles GET requests for retrieving sent emails.
+    """
+    @jwt_required()
+    @blp.response(200, EmailSchema(many=True))
+    def get(self):
+        """
+        Handle GET request to retrieve sent emails.
+
+        Returns:
+            list: A list of sent emails.
+        """
+        current_user_id = get_jwt_identity()
+        try:
+            sent_emails = EmailModel.query.filter_by(sender_id=current_user_id, sent_deleted=False).all()
+            return sent_emails
+        except SQLAlchemyError as e:
+            abort(500, message="Failed to fetch sent emails.")
+
+
+@blp.route("/api/emails/<int:email_id>")
+class EmailReceivedDelete(MethodView):
+    """
+    Method view for handling received email deletion.
+
+    Attributes:
+        delete: Marks as deleted requests a specific received email.
+    """
+    @jwt_required()
+    @blp.response(204)
+    def patch(self, email_id):
+        """
+        Handle PATCH request to mark as deleted a specific received email.
+
+        Args:
+            email_id (int): The ID of the email to patch email as deleted.
+
+        Returns:
+            tuple: A tuple containing an empty response and HTTP status code 204.
+        """
+        current_user_id = get_jwt_identity()
+        try:
+            email = EmailModel.query.filter_by(id=email_id, recipient_id=current_user_id).first()
+            if email is None:
+                abort(404, message="Email not found or unauthorized.")
+            email.mark_as_deleted("received")
+            return {}, 204
+        except SQLAlchemyError as e:
+            abort(500, message="Failed to delete email.")
+
+
+@blp.route("/api/emails/sent/<int:email_id>")
+class EmailSentDelete(MethodView):
+    """
+    Method view for handling sent email deletion.
+
+    Attributes:
+        delete: Marks as deleted requests for deleting a specific sent email.
+    """
+    @jwt_required()
+    @blp.response(204)
+    def patch(self, email_id):
+        """
+        Handle PATCH request to mark as deleted a specific sent email.
+
+        Args:
+            email_id (int): The ID of the email to patch email as deleted.
+
+        Returns:
+            tuple: A tuple containing an empty response and HTTP status code 204.
+        """
+        current_user_id = get_jwt_identity()
+        try:
+            email = EmailModel.query.filter_by(id=email_id, sender_id=current_user_id).first()
+            if email is None:
+                abort(404, message="Email not found or unauthorized.")
+            email.mark_as_deleted("sent")
+            return {}, 204
+        except SQLAlchemyError as e:
+            abort(500, message="Failed to delete email.")
