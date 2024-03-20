@@ -62,4 +62,7 @@ As code improvements for back-end from group 9 to group 8, we suggest:
 6. Environment variables from the .env file are not set inside the build recipe. This helps to ensure the adequate management of environment variables.
 7. Implements testing pipeline with informative summary, in order to find and address bugs quicker. You can check informative test results in Summary tab of ci workflow in Github.
 
-Preview suggestions are related to the pull request
+Preview suggestions are related to the pull request: 
+
+1. [Docker improvement adn folder schemas](https://github.com/TechFellowGroup8/vertech-email-backend/pull/19#issue-2198402815)
+2. [CI testing improvement and function docs](https://github.com/TechFellowGroup8/vertech-email-backend/pull/20#issue-2198464152)
