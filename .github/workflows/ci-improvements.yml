@@ -3,7 +3,7 @@ name: ci-improvements
 on:
   push:
     branches:
-      - main
+      - feat-delete-n-sent
 
 jobs:
   test:
