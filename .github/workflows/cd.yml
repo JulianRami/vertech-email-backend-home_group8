@@ -1,28 +1,28 @@
-name: cd
+# name: cd
 
-on:
-  workflow_run:
-    workflows: ['ci']
-    types: [completed]
+# on:
+#   workflow_run:
+#     workflows: ['ci']
+#     types: [completed]
 
-jobs:
-  deploy:
-    # only run this job if its is the original repository
-    if: github.repository == 'TechFellowGroup8/vertech-email-backend'
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+# jobs:
+#   deploy:
+#     # only run this job if its is the original repository
+#     if: github.repository == 'TechFellowGroup8/vertech-email-backend'
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
 
-    - name: Set up SSH connection
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+#     - name: Set up SSH connection
+#       uses: webfactory/ssh-agent@v0.5.3
+#       with:
+#         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-    - name: Deploy to EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no -l ubuntu ec2-23-22-195-194.compute-1.amazonaws.com <<EOF
-          export CR_PAT=${{ secrets.TOKEN_SECRET }}
-          echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
-          ls
-        EOF
+#     - name: Deploy to EC2
+#       run: |
+#         ssh -o StrictHostKeyChecking=no -l ubuntu ec2-23-22-195-194.compute-1.amazonaws.com <<EOF
+#           export CR_PAT=${{ secrets.TOKEN_SECRET }}
+#           echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+#           ls
+#         EOF

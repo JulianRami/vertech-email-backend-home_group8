@@ -3,7 +3,7 @@ name: ci-improvements
 on:
   push:
     branches:
-      - feat-delete-n-sent
+      - main
 env:
   AWS_REGION: us-east-1 #OK
   ECR_REPOSITORY: home9/hg8_back_email_app_repository #OK
