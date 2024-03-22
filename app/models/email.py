@@ -82,9 +82,16 @@ class EmailModel(db.Model):
         """
         Mark the current EmailModel object as deleted in the database.
         """
-        self.received_deleted = (type == "received")
-        self.sent_deleted = (type == "sent")
-        db.session.commit()
+        if type == "received":
+            self.received_deleted = True
+        elif type == "sent":
+            self.sent_deleted = True
+        
+        if self.received_deleted and self.sent_deleted:
+            # If both flags are set True, delete the email from the database
+            self.delete_from_db()
+        else:
+            db.session.commit()
 
     def delete_from_db(self):
         """
