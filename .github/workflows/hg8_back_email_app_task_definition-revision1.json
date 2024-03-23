@@ -14,25 +14,25 @@
                     "appProtocol": "http"
                 }
             ],
-            "essential": true,
-            "environment": [
+            "secrets": [
                 {
-                    "name": "FLASK_APP",
-                    "value": "app.app"
+                  "name": "FLASK_APP",
+                  "valueFrom": "arn:aws:secretsmanager:us-east-1:637423626700:secret:prod/email/secret_name-C7KV8t:dbInstanceIdentifier::"
                 },
                 {
-                    "name": "DATABASE_URL",
-                    "value": "postgresql://hg9:qJ1WFaMV14FqU5d7M4uCJTWCUCq89Gti@dpg-cnrp4pmd3nmc7399fu6g-a.oregon-postgres.render.com:5432/hg8_mail_app_db"
+                  "name": "DATABASE_URL",
+                  "valueFrom": "arn:aws:secretsmanager:us-east-1:637423626700:secret:prod/email/secret_name-C7KV8t:host::"
                 },
                 {
-                    "name": "FLASK_ENV",
-                    "value": "production"
+                  "name": "FLASK_ENV",
+                  "valueFrom": "arn:aws:secretsmanager:us-east-1:637423626700:secret:prod/email/secret_name-C7KV8t:password::"
                 },
                 {
-                    "name": "JWT_SECRET_KEY",
-                    "value": "3kP7A5tD8J"
+                  "name": "JWT_SECRET_KEY",
+                  "valueFrom": "arn:aws:secretsmanager:us-east-1:637423626700:secret:prod/email/secret_name-C7KV8t:username::"
                 }
-            ],
+              ],
+            "essential": true,
             "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
